@@ -1383,15 +1383,10 @@ function initHanziWriter(char) {
   target.innerHTML = '';
   try {
     _hw = HanziWriter.create('hanziWriterTarget', char, {
-      width: 240,
-      height: 240,
-      padding: 20,
-      strokeColor: '#6b4c9a',
-      radicalColor: '#2a7c6f',
-      strokeAnimationSpeed: 1,
-      delayBetweenStrokes: 200,
-      showCharacter: true,
-      showOutline: true,
+      width: 240, height: 240, padding: 20,
+      strokeColor: '#6b4c9a', radicalColor: '#2a7c6f',
+      strokeAnimationSpeed: 1, delayBetweenStrokes: 200,
+      showCharacter: true, showOutline: true,
       outlineColor: 'rgba(107,76,154,0.15)',
     });
   } catch(e) {
@@ -1460,19 +1455,23 @@ function renderFavList() {
   list.innerHTML = Object.entries(groups).map(([type, items]) => `
     <div class="fav-section">
       <div class="fav-section-title">${labels[type] || type}</div>
-      ${items.map(f => `
+      ${items.map(f => {
+        const dMain = decodeURIComponent(f.main || '');
+        const dSub  = decodeURIComponent(f.sub  || '');
+        const dKo   = decodeURIComponent(f.ko   || '');
+        return `
         <div class="fav-item">
           <div style="flex:1;min-width:0;">
-            <div class="fav-item-main">${f.main}</div>
-            ${f.sub ? `<div class="fav-item-sub">${f.sub}</div>` : ''}
-            ${f.ko ? `<div class="fav-item-ko">${f.ko}</div>` : ''}
+            <div class="fav-item-main">${dMain}</div>
+            ${dSub ? `<div class="fav-item-sub">${dSub}</div>` : ''}
+            ${dKo  ? `<div class="fav-item-ko">${dKo}</div>`  : ''}
           </div>
           <div style="display:flex;gap:0.3rem;flex-shrink:0;">
-            <button class="fav-btn active" title="즐겨찾기 해제" onclick="toggleFav('${f.type}','${f.id}','${encodeURIComponent(f.main)}','${encodeURIComponent(f.sub||'')}','${encodeURIComponent(f.ko||'')}','${f.lang}',this);this.closest('.fav-item').remove();checkFavEmpty()">⭐</button>
-            <button class="mini-speak-btn" onclick="speak('${encodeURIComponent(f.main)}','${f.lang}')">🔊</button>
+            <button class="fav-btn active" title="즐겨찾기 해제" onclick="toggleFav('${f.type}','${f.id}','${f.main}','${f.sub||''}','${f.ko||''}','${f.lang}',this);this.closest('.fav-item').remove();checkFavEmpty()">⭐</button>
+            <button class="mini-speak-btn" onclick="speak('${f.main}','${f.lang}')">🔊</button>
           </div>
-        </div>
-      `).join('')}
+        </div>`;
+      }).join('')}
     </div>
   `).join('');
 }
