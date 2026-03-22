@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사서의 언어 서재 📚</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Playfair+Display:wght@500;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg: #faf9f6;
+  --card: #ffffff;
+  --ink: #1a1a2e;
+  --ink2: #4a4a6a;
+  --ink3: #8a8aaa;
+  --accent: #6b4c9a;
+  --accent2: #9b6fd4;
+  --teal: #2a7c6f;
+  --teal2: #3aaf9d;
+  --amber: #c67c1a;
+  --red: #b54040;
+  --border: rgba(107,76,154,0.15);
+  --shadow: 0 2px 16px rgba(107,76,154,0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+  padding: 1.5rem 2rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(107,76,154,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f0ecff;
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 1;
+}
+.header-sub {
+  font-size: 0.78rem;
+  color: rgba(240,236,255,0.6);
+  margin-top: 0.3rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* TABS */
+.tab-nav {
+  display: flex;
+  background: #1a1a2e;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 0.75rem 1.2rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(240,236,255,0.5);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.tab-btn:hover { color: rgba(240,236,255,0.85); }
+.tab-btn.active {
+  color: #d4b8ff;
+  border-bottom-color: #9b6fd4;
+}
+
+/* CONTENT */
+.tab-content { display: none; padding: 1.5rem; max-width: 860px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* OPIC */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+.topic-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.topic-card:hover { border-color: var(--accent2); background: #f4f0ff; transform: translateY(-1px); }
+.topic-card.selected { background: #f0eaff; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(107,76,154,0.2); }
+.topic-emoji { font-size: 1.5rem; margin-bottom: 0.35rem; }
+.topic-name { font-size: 0.8rem; font-weight: 500; color: var(--ink); }
+.topic-en { font-size: 0.7rem; color: var(--ink3); }
+
+.script-box {
+  background: #f7f4ff;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+.script-level { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent2); margin-bottom: 0.5rem; }
+.script-text { font-size: 0.9rem; line-height: 1.8; color: var(--ink); }
+.script-ko { font-size: 0.82rem; color: var(--ink2); margin-top: 0.5rem; font-style: italic; }
+.speak-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--accent); color: white;
+  border: none; border-radius: 999px;
+  padding: 0.45rem 1rem; font-size: 0.78rem;
+  cursor: pointer; margin-top: 0.75rem;
+  transition: background 0.2s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.speak-btn:hover { background: var(--accent2); }
+.speak-btn.teal { background: var(--teal); }
+.speak-btn.teal:hover { background: var(--teal2); }
+
+/* PRONUNCIATION */
+.pron-section { margin-bottom: 1.25rem; }
+.pron-word {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pron-word:hover { background: #f4f0ff; border-color: var(--accent2); }
+.pron-en { font-size: 1rem; font-weight: 500; color: var(--ink); }
+.pron-ipa { font-family: monospace; font-size: 0.88rem; color: var(--teal); letter-spacing: 0.02em; }
+.pron-tip { font-size: 0.75rem; color: var(--ink2); margin-top: 0.2rem; }
+.pron-tag {
+  font-size: 0.68rem; padding: 0.2rem 0.6rem;
+  background: #fff0e0; color: var(--amber);
+  border-radius: 999px; font-weight: 600;
+}
+.pron-tag.rp { background: #e8f5ff; color: #1a5ca0; }
+
+/* HANJA */
+.hanja-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+.hanja-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.hanja-card:hover { border-color: var(--accent2); box-shadow: 0 4px 16px rgba(107,76,154,0.12); transform: translateY(-2px); }
+.hanja-char { font-size: 2.5rem; color: var(--ink); line-height: 1; margin-bottom: 0.5rem; }
+.hanja-row { font-size: 0.75rem; margin-bottom: 0.2rem; }
+.hanja-label { color: var(--ink3); font-size: 0.68rem; }
+.hanja-val { color: var(--ink); font-weight: 500; }
+.hanja-pinyin { color: var(--teal); }
+.hanja-romaji { color: var(--accent2); }
+.hanja-ko { color: var(--amber); font-weight: 600; }
+.mini-speak-btn {
+  flex-shrink: 0;
+  border: none; background: none; cursor: pointer;
+  font-size: 13px; padding: 2px 4px;
+  border-radius: 4px; line-height: 1;
+  opacity: 0.55; transition: opacity 0.15s, background 0.15s;
+}
+.mini-speak-btn:hover { opacity: 1; }
+.mini-speak-btn.zh:hover { background: #e0f7f3; }
+.mini-speak-btn.ja:hover { background: #f0eaff; }
+
+/* CHINESE / JAPANESE */
+.conv-category { margin-bottom: 1.5rem; }
+.conv-cat-title {
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--ink3);
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+.conv-item {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  align-items: start;
+}
+.conv-item:hover { background: #f4f0ff; border-color: var(--accent2); }
+.conv-main { font-size: 1.05rem; color: var(--ink); font-weight: 500; }
+.conv-read { font-size: 0.78rem; color: var(--teal); margin-top: 0.2rem; }
+.conv-ko { font-size: 0.85rem; color: var(--ink2); }
+.conv-tip { font-size: 0.72rem; color: var(--ink3); margin-top: 0.2rem; }
+
+/* SEARCH */
+.search-bar {
+  width: 100%; padding: 0.75rem 1rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  font-size: 0.88rem; background: var(--card);
+  color: var(--ink); outline: none;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.search-bar:focus { border-color: var(--accent); }
+
+/* BADGE */
+.badge {
+  display: inline-block; font-size: 0.65rem; padding: 0.18rem 0.55rem;
+  border-radius: 999px; font-weight: 600; margin-left: 0.4rem;
+}
+.badge-im { background: #fff3e0; color: #b56d00; }
+.badge-al { background: #e8f5e9; color: #2e7d32; }
+.badge-ih { background: #e3f2fd; color: #1565c0; }
+
+/* LEVEL TABS */
+.level-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.level-tab {
+  padding: 0.35rem 0.9rem; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--bg); color: var(--ink2);
+  cursor: pointer; transition: all 0.15s;
+}
+.level-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* TTS status */
+.tts-note { font-size: 0.72rem; color: var(--ink3); text-align: center; padding: 0.5rem; }
+
+/* SECTION HEADER */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+
+/* ===== SHADOWING PANEL ===== */
+.shadow-panel {
+  display: none;
+  margin-top: 0.75rem;
+  background: #f7f4ff;
+  border: 1px solid rgba(107,76,154,0.2);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+}
+.shadow-panel.open { display: block; }
+.shadow-sentence {
+  font-size: 1.1rem; font-weight: 500; color: var(--ink);
+  margin-bottom: 0.25rem; line-height: 1.5;
+}
+.shadow-read {
+  font-size: 0.8rem; color: var(--teal); margin-bottom: 0.6rem;
+}
+.shadow-ko {
+  font-size: 0.82rem; color: var(--ink2); margin-bottom: 0.85rem;
+  font-style: italic;
+}
+.shadow-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.sh-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 0.38rem 0.9rem; font-size: 0.76rem; font-weight: 500;
+  cursor: pointer; background: var(--card); color: var(--ink2);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.sh-btn:hover { border-color: var(--accent2); color: var(--accent); }
+.sh-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.sh-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.sh-btn.danger { background: var(--red); color: #fff; border-color: var(--red); }
+.sh-btn.teal { background: var(--teal); color: #fff; border-color: var(--teal); }
+.sh-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.shadow-status {
+  font-size: 0.73rem; color: var(--ink3); margin-top: 0.6rem; min-height: 1.1rem;
+}
+.shadow-status.rec { color: var(--red); font-weight: 500; }
+.shadow-status.ok { color: var(--teal); font-weight: 500; }
+
+/* repeat-mode highlight on conv-item */
+.conv-item.active-shadow {
+  border-color: var(--accent);
+  background: #f0eaff;
+}
+
+/* ===== INTERVIEW ===== */
+.interview-q {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem;
+  margin-bottom: 0.6rem; cursor: pointer; transition: all 0.15s;
+}
+.interview-q:hover { border-color: var(--accent2); background: #f4f0ff; }
+.interview-q.open { border-color: var(--accent); background: #f0eaff; }
+.iq-text { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
+.iq-tag { font-size: 0.68rem; padding: 0.18rem 0.6rem; border-radius: 999px;
+  background: #e8f5ff; color: #1a5ca0; font-weight: 600; margin-left: 0.5rem; }
+.iq-answer {
+  display: none; margin-top: 0.85rem;
+  border-top: 1px solid var(--border); padding-top: 0.85rem;
+}
+.iq-answer.show { display: block; }
+.iq-ans-en { font-size: 0.88rem; line-height: 1.75; color: var(--ink); margin-bottom: 0.5rem; }
+.iq-ans-ko { font-size: 0.8rem; color: var(--ink2); font-style: italic; line-height: 1.6; }
+
+/* ===== QUIZ / FLASHCARD ===== */
+.quiz-mode-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; }
+.qmode-btn {
+  padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600;
+  border: 1px solid var(--border); background: var(--bg); color: var(--ink2);
+  cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+}
+.qmode-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.flashcard-wrap { perspective: 900px; margin: 1rem auto; max-width: 480px; }
+.flashcard {
+  width: 100%; height: 200px; position: relative;
+  transform-style: preserve-3d; transition: transform 0.5s;
+  cursor: pointer;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius); border: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 1.5rem; text-align: center; background: var(--card);
+}
+.fc-back { transform: rotateY(180deg); background: #f0eaff; }
+.fc-main { font-size: 2rem; color: var(--ink); margin-bottom: 0.5rem; }
+.fc-sub { font-size: 0.88rem; color: var(--ink2); }
+.fc-hint { font-size: 0.72rem; color: var(--ink3); margin-top: 0.75rem; }
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.quiz-counter { font-size: 0.8rem; color: var(--ink3); }
+.quiz-progress {
+  height: 4px; background: var(--border); border-radius: 2px; margin: 0.75rem 0;
+}
+.quiz-progress-bar { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+.quiz-source-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+.qsrc-btn {
+  padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600;
+  border: 1px solid var(--border); background: var(--bg); color: var(--ink2);
+  cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+}
+.qsrc-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+.mcq-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1rem; }
+.mcq-opt {
+  padding: 0.7rem 0.9rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg);
+  font-size: 0.85rem; cursor: pointer; text-align: center;
+  transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+}
+.mcq-opt:hover { border-color: var(--accent2); background: #f4f0ff; }
+.mcq-opt.correct { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; font-weight: 600; }
+.mcq-opt.wrong { background: #ffebee; border-color: #c62828; color: #c62828; }
+.quiz-result { text-align: center; padding: 2rem 1rem; }
+.quiz-score { font-size: 3rem; font-weight: 700; color: var(--accent); }
+.quiz-score-label { font-size: 0.85rem; color: var(--ink2); margin-top: 0.25rem; }
+
+/* ===== HANJA STROKE MODAL ===== */
+.hanja-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,26,46,0.55); z-index: 1000;
+  align-items: center; justify-content: center;
+}
+.hanja-modal-overlay.open { display: flex; }
+.hanja-modal {
+  background: var(--card); border-radius: var(--radius);
+  padding: 1.5rem; max-width: 360px; width: 90%;
+  border: 1px solid var(--border); position: relative;
+}
+.hanja-modal-close {
+  position: absolute; top: 0.75rem; right: 0.75rem;
+  background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--ink3);
+}
+.stroke-canvas-wrap {
+  background: #f7f4ff; border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 1rem 0; overflow: hidden;
+}
+.stroke-canvas-wrap canvas { display: block; }
+.stroke-info { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.stroke-info-item { background: var(--bg); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; }
+.stroke-info-label { font-size: 0.65rem; color: var(--ink3); margin-bottom: 0.15rem; }
+.stroke-info-val { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+
+/* ===== MY SCRIPT ===== */
+.myscript-textarea {
+  width: 100%; min-height: 140px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem; font-size: 0.92rem; line-height: 1.75;
+  font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  background: var(--bg); resize: vertical; outline: none;
+  transition: border-color 0.2s;
+}
+.myscript-textarea:focus { border-color: var(--accent); }
+.myscript-toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0; align-items: center; }
+.ms-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 0.4rem 1rem; font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; background: var(--card); color: var(--ink2);
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+}
+.ms-btn:hover { border-color: var(--accent2); color: var(--accent); }
+.ms-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.ms-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.ms-btn.teal { background: var(--teal); color: #fff; border-color: var(--teal); }
+.ms-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.ms-loading {
+  display: none; align-items: center; gap: 0.6rem;
+  font-size: 0.82rem; color: var(--ink3); padding: 0.5rem 0;
+}
+.ms-loading.show { display: flex; }
+.ms-spinner {
+  width: 16px; height: 16px; border: 2px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.ms-result { margin-top: 1rem; }
+.ms-diff-wrap {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem; line-height: 1.85; font-size: 0.9rem;
+}
+.ms-del { background: #ffebee; color: #c62828; text-decoration: line-through; border-radius: 3px; padding: 0 2px; }
+.ms-ins { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-radius: 3px; padding: 0 2px; }
+.ms-corrected-box {
+  background: #f0eaff; border: 1px solid rgba(107,76,154,0.25);
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem;
+  font-size: 0.92rem; line-height: 1.8; color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+.ms-reason-box {
+  background: var(--bg); border-left: 3px solid var(--teal);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.85rem 1.1rem; font-size: 0.82rem;
+  line-height: 1.7; color: var(--ink2);
+}
+.ms-reason-box ul { padding-left: 1.2rem; margin: 0.4rem 0 0; }
+.ms-reason-box li { margin-bottom: 0.35rem; }
+.ms-section-label {
+  font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink3); margin-bottom: 0.4rem;
+}
+.ms-apikey-wrap {
+  display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;
+}
+.ms-apikey-input {
+  flex: 1; padding: 0.6rem 0.9rem; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 0.82rem;
+  font-family: monospace; color: var(--ink); background: var(--bg); outline: none;
+}
+.ms-apikey-input:focus { border-color: var(--accent); }
+.ms-topic-select {
+  width: 100%; padding: 0.6rem 0.9rem; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 0.85rem;
+  font-family: 'Noto Sans KR', sans-serif; color: var(--ink);
+  background: var(--bg); outline: none; margin-bottom: 0.75rem;
+}
+.ms-history-item {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem; margin-bottom: 0.5rem; cursor: pointer;
+  transition: all 0.15s; background: var(--bg);
+}
+.ms-history-item:hover { border-color: var(--accent2); background: #f4f0ff; }
+.ms-history-date { font-size: 0.68rem; color: var(--ink3); margin-bottom: 0.25rem; }
+.ms-history-preview { font-size: 0.82rem; color: var(--ink2); }
+
+/* ===== FAVORITES ===== */
+.fav-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 15px; padding: 2px 4px; line-height: 1;
+  opacity: 0.4; transition: opacity 0.15s, transform 0.15s;
+  flex-shrink: 0;
+}
+.fav-btn:hover { opacity: 0.8; transform: scale(1.2); }
+.fav-btn.active { opacity: 1; }
+.fav-empty { text-align: center; padding: 3rem 1rem; color: var(--ink3); font-size: 0.88rem; }
+.fav-section { margin-bottom: 1.25rem; }
+.fav-section-title {
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--ink3);
+  padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  margin-bottom: 0.6rem;
+}
+.fav-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 0.5rem; padding: 0.7rem 0.9rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); margin-bottom: 0.45rem;
+  transition: all 0.15s;
+}
+.fav-item:hover { border-color: var(--accent2); background: #f4f0ff; }
+.fav-item-main { font-size: 0.9rem; color: var(--ink); font-weight: 500; }
+.fav-item-sub { font-size: 0.75rem; color: var(--ink3); margin-top: 0.15rem; }
+.fav-item-ko { font-size: 0.78rem; color: var(--ink2); margin-top: 0.1rem; }
+
+@media(max-width:600px){
+  .conv-item { grid-template-columns: 1fr; }
+  .header-title { font-size: 1.4rem; }
+  .tab-btn { padding: 0.65rem 0.9rem; font-size: 0.72rem; }
+  .mcq-options { grid-template-columns: 1fr; }
+}
+
+
+/* ===== MY WORDBOOK ===== */
+.wb-form { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; }
+.wb-form-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.wb-input {
+  flex: 1; padding: 0.55rem 0.85rem; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--ink); background: var(--card); outline: none; transition: border-color 0.15s;
+}
+.wb-input:focus { border-color: var(--accent); }
+.wb-select {
+  padding: 0.55rem 0.75rem; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-family: 'Noto Sans KR', sans-serif;
+  color: var(--ink); background: var(--card); outline: none; cursor: pointer;
+}
+.wb-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.9rem 1rem;
+  margin-bottom: 0.5rem; transition: all 0.15s;
+}
+.wb-card:hover { border-color: var(--accent2); box-shadow: 0 2px 8px rgba(107,76,154,0.08); }
+.wb-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+.wb-front { font-size: 1.05rem; font-weight: 500; color: var(--ink); }
+.wb-back { font-size: 0.88rem; color: var(--teal); margin-top: 0.2rem; }
+.wb-note { font-size: 0.75rem; color: var(--ink3); margin-top: 0.3rem; font-style: italic; }
+.wb-meta { display: flex; gap: 0.4rem; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; }
+.wb-cat-badge {
+  font-size: 0.65rem; padding: 0.18rem 0.55rem; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--border); color: var(--ink2);
+}
+.wb-lang-badge {
+  font-size: 0.65rem; padding: 0.18rem 0.55rem; border-radius: 999px;
+  background: #f0eaff; color: var(--accent); font-weight: 600;
+}
+.wb-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+.wb-act-btn {
+  background: none; border: none; cursor: pointer; font-size: 13px;
+  padding: 3px 5px; border-radius: 4px; opacity: 0.5; transition: all 0.15s;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.wb-act-btn:hover { opacity: 1; background: var(--bg); }
+.wb-source-badge {
+  font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 999px;
+  background: #e8f5ff; color: #1a5ca0; font-weight: 600;
+}
+.wb-cat-btn {
+  padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600;
+  border: 1px solid var(--border); background: var(--bg); color: var(--ink2);
+  cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+}
+.wb-cat-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.wb-empty { text-align: center; padding: 3rem 1rem; color: var(--ink3); font-size: 0.88rem; }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">📚 사서의 언어 서재</div>
+  <div class="header-sub">Librarian Language Learning Studio</div>
+</div>
+
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" onclick="switchTab('opic', this)">🎤 OPIc 사서</button>
+  <button class="tab-btn" onclick="switchTab('interview', this)">💼 면접 Q&amp;A</button>
+  <button class="tab-btn" onclick="switchTab('pron', this)">🇬🇧 RP 발음</button>
+  <button class="tab-btn" onclick="switchTab('english', this)">🗣️ 영국 회화</button>
+  <button class="tab-btn" onclick="switchTab('hanja', this)">漢 한자</button>
+  <button class="tab-btn" onclick="switchTab('chinese', this)">🇨🇳 중국어 회화</button>
+  <button class="tab-btn" onclick="switchTab('japanese', this)">🇯🇵 일본어 회화</button>
+  <button class="tab-btn" onclick="switchTab('quiz', this)">🃏 퀴즈</button>
+  <button class="tab-btn" onclick="switchTab('favorites', this)">⭐ 즐겨찾기</button>
+  <button class="tab-btn" onclick="switchTab('wordbook', this)">📓 내 단어장</button>
+  <button class="tab-btn" onclick="switchTab('myscript', this)">✍️ 내 스크립트</button>
+</div>
+
+<!-- ===== OPIC ===== -->
+<div id="tab-opic" class="tab-content active">
+  <div class="card">
+    <div class="card-title">🎤 OPIc 사서 & 데이터전문사서 주제</div>
+    <div class="level-tabs">
+      <div class="level-tab active" onclick="setLevel('IM', this)">IM <span class="badge badge-im">목표</span></div>
+      <div class="level-tab" onclick="setLevel('IH', this)">IH</div>
+      <div class="level-tab" onclick="setLevel('AL', this)">AL</div>
+    </div>
+    <div class="topic-grid" id="topicGrid"></div>
+  </div>
+  <div class="card" id="scriptCard" style="display:none">
+    <div class="card-title" id="scriptTitle">📄 스크립트</div>
+    <div id="scriptContent"></div>
+  </div>
+</div>
+
+<!-- ===== PRONUNCIATION ===== -->
+<div id="tab-pron" class="tab-content">
+  <div class="card">
+    <div class="card-title">🇬🇧 영국 RP (Received Pronunciation) 발음 가이드</div>
+    <p style="font-size:0.82rem; color:var(--ink2); margin-bottom:1rem; line-height:1.6;">
+      RP는 BBC English 또는 Queen's English라고도 불리는 표준 영국 발음입니다. 사서직 영어 인터뷰나 OPIc에서 활용할 수 있습니다.
+    </p>
+    <input class="search-bar" placeholder="단어 검색..." oninput="filterPron(this.value)">
+    <div id="pronList"></div>
+  </div>
+</div>
+
+<!-- ===== ENGLISH CONVERSATION ===== -->
+<div id="tab-english" class="tab-content">
+  <div class="card">
+    <div class="card-title">🗣️ 영국 영어 회화 따라하기</div>
+    <p style="font-size:0.82rem;color:var(--ink2);margin-bottom:1rem;line-height:1.6;">
+      문장을 클릭하면 RP 발음으로 듣고, 따라 말한 뒤 내 발음과 비교할 수 있습니다.
+    </p>
+    <input class="search-bar" placeholder="검색..." oninput="filterConvEn(this.value)">
+    <div id="englishList"></div>
+  </div>
+</div>
+
+<!-- ===== HANJA ===== -->
+<div id="tab-hanja" class="tab-content">
+  <div class="card">
+    <div class="card-title">漢 사서 관련 한자</div>
+    <p style="font-size:0.82rem; color:var(--ink2); margin-bottom:1rem;">
+      도서관·사서 관련 핵심 한자 — 한국어 음·훈 / 중국어 병음 / 일본어 독음 표시
+    </p>
+    <input class="search-bar" placeholder="한자 또는 훈·음 검색..." oninput="filterHanja(this.value)">
+    <div class="hanja-grid" id="hanjaGrid"></div>
+  </div>
+</div>
+
+<!-- ===== CHINESE ===== -->
+<div id="tab-chinese" class="tab-content">
+  <div class="card">
+    <div class="card-title">🇨🇳 중국어 기본 회화 — 도서관 & 일상</div>
+    <input class="search-bar" placeholder="검색..." oninput="filterConv('zh', this.value)">
+    <div id="chineseList"></div>
+  </div>
+</div>
+
+<!-- ===== JAPANESE ===== -->
+<div id="tab-japanese" class="tab-content">
+  <div class="card">
+    <div class="card-title">🇯🇵 일본어 기본 회화 — 도서관 & 일상</div>
+    <input class="search-bar" placeholder="검색..." oninput="filterConv('ja', this.value)">
+    <div id="japaneseList"></div>
+  </div>
+</div>
+
+<!-- ===== INTERVIEW ===== -->
+<div id="tab-interview" class="tab-content">
+  <div class="card">
+    <div class="card-title">💼 사서직 면접 Q&amp;A</div>
+    <p style="font-size:0.82rem;color:var(--ink2);margin-bottom:1rem;line-height:1.6;">
+      질문을 클릭하면 영어 모범 답변 + 한국어 요약이 펼쳐집니다. 🔊 버튼으로 RP 발음 연습도 가능합니다.
+    </p>
+    <div id="interviewList"></div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="tab-quiz" class="tab-content">
+  <div class="card">
+    <div class="card-title">🃏 퀴즈 &amp; 플래시카드</div>
+    <div class="quiz-mode-tabs">
+      <button class="qmode-btn active" onclick="setQuizMode('flash',this)">📇 플래시카드</button>
+      <button class="qmode-btn" onclick="setQuizMode('mcq',this)">🔘 객관식</button>
+    </div>
+    <div class="quiz-source-tabs">
+      <button class="qsrc-btn active" onclick="setQuizSrc('hanja',this)">漢 한자</button>
+      <button class="qsrc-btn" onclick="setQuizSrc('zh',this)">🇨🇳 중국어</button>
+      <button class="qsrc-btn" onclick="setQuizSrc('ja',this)">🇯🇵 일본어</button>
+      <button class="qsrc-btn" onclick="setQuizSrc('en',this)">🇬🇧 영어</button>
+    </div>
+    <div class="quiz-progress"><div class="quiz-progress-bar" id="quizProgressBar" style="width:0%"></div></div>
+    <div id="quizArea"></div>
+  </div>
+</div>
+
+<!-- ===== HANJA STROKE MODAL ===== -->
+<div class="hanja-modal-overlay" id="hanjaModal">
+  <div class="hanja-modal">
+    <button class="hanja-modal-close" onclick="closeStrokeModal()">✕</button>
+    <div id="hanjaModalContent"></div>
+  </div>
+</div>
+
+<!-- ===== FAVORITES ===== -->
+<div id="tab-favorites" class="tab-content">
+  <div class="card">
+    <div class="card-title">⭐ 즐겨찾기</div>
+    <p style="font-size:0.82rem;color:var(--ink2);margin-bottom:1rem;">각 항목 옆 ⭐ 버튼으로 저장한 항목들이 여기에 모입니다. localStorage에 저장되어 앱을 닫아도 유지됩니다.</p>
+    <div id="favList"></div>
+  </div>
+</div>
+
+
+<!-- ===== MY WORDBOOK ===== -->
+<div id="tab-wordbook" class="tab-content">
+  <div class="card">
+    <div class="card-title">📓 내 단어장</div>
+    <p style="font-size:0.82rem;color:var(--ink2);margin-bottom:1rem;line-height:1.6;">
+      직접 만든 단어장입니다. 앱 안에서 추가하거나, <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:0.78rem;">data/wordbook.js</code> 파일을 직접 편집해 대량 추가할 수 있습니다.
+    </p>
+    <!-- ADD FORM -->
+    <div class="wb-form" id="wbForm">
+      <div class="wb-form-row">
+        <input class="wb-input" id="wbFront" placeholder="앞면 (단어·문장·한자)">
+        <input class="wb-input" id="wbBack" placeholder="뒷면 (뜻·번역·독음)">
+      </div>
+      <div class="wb-form-row">
+        <input class="wb-input" id="wbCategory" placeholder="카테고리 (예: 📚 사서 핵심개념)" style="flex:2;">
+        <select class="wb-select" id="wbLang">
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="en">🇬🇧 영어</option>
+          <option value="zh">🇨🇳 중국어</option>
+          <option value="ja">🇯🇵 일본어</option>
+        </select>
+      </div>
+      <input class="wb-input" id="wbNote" placeholder="메모 (선택)" style="margin-bottom:0.75rem;">
+      <button class="ms-btn primary" onclick="addWordbook()">＋ 추가</button>
+      <button class="ms-btn" onclick="exportWordbook()">📥 JSON 내보내기</button>
+      <button class="ms-btn" onclick="document.getElementById('wbImport').click()">📤 JSON 가져오기</button>
+      <input type="file" id="wbImport" accept=".json" style="display:none" onchange="importWordbook(event)">
+    </div>
+    <!-- FILTER -->
+    <div style="display:flex;gap:0.5rem;margin:1rem 0;flex-wrap:wrap;" id="wbCatFilter"></div>
+    <input class="search-bar" placeholder="검색..." oninput="filterWordbook(this.value)" style="margin-bottom:0.75rem;">
+    <!-- STATS -->
+    <div id="wbStats" style="font-size:0.75rem;color:var(--ink3);margin-bottom:0.75rem;"></div>
+    <!-- LIST -->
+    <div id="wbList"></div>
+  </div>
+</div>
+
+<!-- ===== MY SCRIPT ===== -->
+<div id="tab-myscript" class="tab-content">
+  <div class="card">
+    <div class="card-title">✍️ 내 스크립트 AI 교정</div>
+    <p style="font-size:0.82rem;color:var(--ink2);margin-bottom:1rem;line-height:1.6;">
+      사서 업무 관련 영어 스크립트를 작성하면 AI가 문법·표현·RP 발음까지 교정해드립니다.
+    </p>
+
+    <!-- API KEY -->
+    <div class="ms-section-label">🔑 Claude API Key</div>
+    <div class="ms-apikey-wrap">
+      <input class="ms-apikey-input" type="password" id="msApiKey" placeholder="sk-ant-api03-..." oninput="saveApiKey(this.value)">
+      <button class="ms-btn" onclick="toggleApiKeyVisible()">👁</button>
+    </div>
+    <p style="font-size:0.72rem;color:var(--ink3);margin-bottom:1rem;">
+      API 키는 브라우저 localStorage에만 저장되며 외부로 전송되지 않습니다.
+      <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);">키 발급 →</a>
+    </p>
+
+    <!-- TOPIC -->
+    <div class="ms-section-label">📌 주제 선택</div>
+    <select class="ms-topic-select" id="msTopicSelect">
+      <option value="opic">OPIc 스크립트 (발음·유창성 중심)</option>
+      <option value="interview">면접 답변 (격식체·전문용어)</option>
+      <option value="email">업무 이메일 (비즈니스 영어)</option>
+      <option value="reference">참고서비스 응대 (이용자 대화)</option>
+      <option value="presentation">발표 스크립트 (학술 영어)</option>
+    </select>
+
+    <!-- INPUT -->
+    <div class="ms-section-label">📝 내 스크립트</div>
+    <textarea class="myscript-textarea" id="msInput" placeholder="영어로 작성한 사서 관련 스크립트를 입력하세요.
+예) I work as a librarian. My job is help people find book and manage catalog. Yesterday a researcher come to me and ask about database..."></textarea>
+
+    <div class="myscript-toolbar">
+      <button class="ms-btn primary" id="msCorrectBtn" onclick="correctScript()">🤖 AI 교정 요청</button>
+      <button class="ms-btn" onclick="clearScript()">🗑 초기화</button>
+      <button class="ms-btn" onclick="loadSample()">📋 샘플 불러오기</button>
+    </div>
+
+    <div class="ms-loading" id="msLoading">
+      <div class="ms-spinner"></div>
+      <span>AI가 스크립트를 분석 중입니다...</span>
+    </div>
+
+    <!-- RESULT -->
+    <div class="ms-result" id="msResult"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="card" id="msHistoryCard" style="display:none">
+    <div class="card-title" style="font-size:0.95rem;">📂 교정 히스토리</div>
+    <div id="msHistoryList"></div>
+  </div>
+</div>
+
+
+<script type="module">
+// ── 데이터 import ──────────────────────────────────────────────
+import { HANJA_DATA }    from './data/hanja.js';
+import { ZH_DATA }       from './data/chinese.js';
+import { JA_DATA }       from './data/japanese.js';
+import { PRON_DATA }     from './data/pron.js';
+import { EN_DATA }       from './data/english.js';
+import { OPIC_TOPICS }   from './data/opic_topics.js';
+import { OPIC_SCRIPTS }  from './data/opic_scripts.js';
+import { INTERVIEW_DATA } from './data/interview.js';
+import { WORDBOOK_DATA } from './data/wordbook.js';
+
+// ── 전역 노출 (기존 함수들이 window scope에서 접근) ──────────────
+window.HANJA_DATA    = HANJA_DATA;
+window.ZH_DATA       = ZH_DATA;
+window.JA_DATA       = JA_DATA;
+window.PRON_DATA     = PRON_DATA;
+window.EN_DATA       = EN_DATA;
+window.OPIC_TOPICS   = OPIC_TOPICS;
+window.OPIC_SCRIPTS  = OPIC_SCRIPTS;
+window.INTERVIEW_DATA = INTERVIEW_DATA;
+window.WORDBOOK_DATA = WORDBOOK_DATA;
+
+// ===== QUIZ ENGINE =====
+let quizMode = 'flash';
+let quizSrc = 'hanja';
+let quizDeck = [];
+let quizIdx = 0;
+let quizScore = 0;
+let quizTotal = 0;
+let fcFlipped = false;
+
+function buildDeck(src) {
+  if (src === 'hanja') return HANJA_DATA.map(h => ({ front: h.char, back: `${h.hun}(${h.eum}) | 중: ${h.pinyin} | 일: ${h.romaji}`, speak: h.char, lang: 'zh-CN' }));
+  if (src === 'zh') return ZH_DATA.flatMap(c => c.items.map(i => ({ front: i.zh, back: `${i.py}\n${i.ko}`, speak: i.zh, lang: 'zh-CN' })));
+  if (src === 'ja') return JA_DATA.flatMap(c => c.items.map(i => ({ front: i.ja, back: `${i.read}\n${i.ko}`, speak: i.ja, lang: 'ja-JP' })));
+  if (src === 'en') return EN_DATA.flatMap(c => c.items.map(i => ({ front: i.en, back: `${i.ipa}\n${i.ko}`, speak: i.en, lang: 'en-GB' })));
+  return [];
+}
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function setQuizMode(mode, btn) {
+  quizMode = mode;
+  document.querySelectorAll('.qmode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  startQuiz();
+}
+
+function setQuizSrc(src, btn) {
+  quizSrc = src;
+  document.querySelectorAll('.qsrc-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  startQuiz();
+}
+
+function startQuiz() {
+  quizDeck = shuffle(buildDeck(quizSrc));
+  quizIdx = 0; quizScore = 0; quizTotal = quizDeck.length; fcFlipped = false;
+  updateProgress();
+  if (quizMode === 'flash') renderFlashcard();
+  else renderMCQ();
+}
+
+function updateProgress() {
+  const pct = quizTotal ? Math.round((quizIdx / quizTotal) * 100) : 0;
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+}
+
+function renderFlashcard() {
+  const area = document.getElementById('quizArea');
+  if (quizIdx >= quizDeck.length) { renderQuizResult(); return; }
+  const card = quizDeck[quizIdx];
+  fcFlipped = false;
+  area.innerHTML = `
+    <div class="flashcard-wrap">
+      <div class="flashcard" id="fcCard" onclick="flipCard()">
+        <div class="fc-face fc-front">
+          <div class="fc-main">${card.front}</div>
+          <div class="fc-hint">클릭하면 뒤집힙니다</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-sub" style="white-space:pre-line;font-size:1rem;">${card.back}</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-nav">
+      <button class="sh-btn" onclick="quizPrev()">← 이전</button>
+      <span class="quiz-counter">${quizIdx + 1} / ${quizTotal}</span>
+      <button class="sh-btn primary" onclick="quizNext()">다음 →</button>
+    </div>
+    <div style="text-align:center;margin-top:0.75rem;">
+      <button class="sh-btn teal" onclick="speak('${encodeURIComponent(card.front)}','${card.lang}')">🔊 발음 듣기</button>
+    </div>
+  `;
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  const card = document.getElementById('fcCard');
+  if (card) card.classList.toggle('flipped', fcFlipped);
+}
+
+function quizNext() { quizIdx = Math.min(quizIdx + 1, quizDeck.length); updateProgress(); renderFlashcard(); }
+function quizPrev() { quizIdx = Math.max(quizIdx - 1, 0); updateProgress(); renderFlashcard(); }
+
+function renderMCQ() {
+  const area = document.getElementById('quizArea');
+  if (quizIdx >= quizDeck.length) { renderQuizResult(); return; }
+  const card = quizDeck[quizIdx];
+  const wrongs = shuffle(quizDeck.filter((_, i) => i !== quizIdx)).slice(0, 3).map(c => c.back);
+  const options = shuffle([card.back, ...wrongs]);
+  area.innerHTML = `
+    <div style="font-size:1.2rem;font-weight:500;color:var(--ink);margin-bottom:0.5rem;text-align:center;">${card.front}</div>
+    <div style="font-size:0.75rem;color:var(--ink3);text-align:center;margin-bottom:0.75rem;">${quizIdx + 1} / ${quizTotal}</div>
+    <div class="mcq-options" id="mcqOpts">
+      ${options.map((opt, i) => `<div class="mcq-opt" onclick="checkMCQ(this,'${encodeURIComponent(opt)}','${encodeURIComponent(card.back)}')">${opt.split('\n')[0]}</div>`).join('')}
+    </div>
+    <div style="text-align:center;margin-top:0.75rem;">
+      <button class="sh-btn teal" onclick="speak('${encodeURIComponent(card.front)}','${card.lang}')">🔊 듣기</button>
+    </div>
+  `;
+}
+
+function checkMCQ(el, encChosen, encCorrect) {
+  const chosen = decodeURIComponent(encChosen);
+  const correct = decodeURIComponent(encCorrect);
+  document.querySelectorAll('.mcq-opt').forEach(o => o.onclick = null);
+  if (chosen === correct) { el.classList.add('correct'); quizScore++; }
+  else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.mcq-opt').forEach(o => {
+      if (decodeURIComponent(o.getAttribute('onclick') ? '' : '').includes(correct) || o.textContent === correct.split('\n')[0]) o.classList.add('correct');
+    });
+  }
+  setTimeout(() => { quizIdx++; updateProgress(); renderMCQ(); }, 1000);
+}
+
+function renderQuizResult() {
+  const area = document.getElementById('quizArea');
+  const pct = quizMode === 'mcq' ? Math.round((quizScore / quizTotal) * 100) : 100;
+  area.innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-score">${quizMode === 'mcq' ? pct + '%' : '완료!'}</div>
+      <div class="quiz-score-label">${quizMode === 'mcq' ? quizTotal + '문제 중 ' + quizScore + '개 정답' : quizTotal + '장 모두 학습했습니다'}</div>
+      <button class="sh-btn primary" style="margin-top:1.5rem;" onclick="startQuiz()">🔄 다시 시작</button>
+    </div>
+  `;
+  document.getElementById('quizProgressBar').style.width = '100%';
+}
+
+// ===== HANJA STROKE MODAL =====
+const STROKE_DATA = {
+  '圖': { strokes: 14, meaning: '그림, 지도', composition: '囗(에워쌀 위) + 啚(아낄 비)', note: '바깥 테두리(囗)부터 안을 채우는 순서로 씁니다.' },
+  '書': { strokes: 10, meaning: '글, 책', composition: '聿(붓 율) + 者(놈 자)', note: '붓(聿)으로 글을 쓰는 모습. 위에서 아래로.' },
+  '館': { strokes: 16, meaning: '집, 관', composition: '食(먹을 식) + 官(벼슬 관)', note: '食 부수. 왼쪽 식(食)부터 오른쪽으로.' },
+  '司': { strokes: 5, meaning: '맡다, 관리하다', composition: '口(입 구) + 𠃌', note: '가로획 → 꺾기 → 안의 口 순서.' },
+  '目': { strokes: 5, meaning: '눈, 항목', composition: '상형자 (눈 모양)', note: '세로 테두리 → 가로 두 획. 눈의 형태.' },
+  '錄': { strokes: 16, meaning: '기록하다', composition: '金(쇠 금) + 彔(새길 록)', note: '金 부수(왼쪽) 먼저, 오른쪽 彔 순서로.' },
+  '分': { strokes: 4, meaning: '나누다', composition: '刀(칼 도) + 八(여덟 팔)', note: '八(위 두 획) → 刀(아래) 순서.' },
+  '類': { strokes: 19, meaning: '무리, 종류', composition: '米(쌀 미) + 大(큰 대) + 頁(머리 혈)', note: '米 → 大 → 頁 왼쪽에서 오른쪽으로.' },
+  '情': { strokes: 11, meaning: '뜻, 정', composition: '忄(마음 심) + 青(푸를 청)', note: '왼쪽 忄(심방변) 먼저, 오른쪽 青.' },
+  '報': { strokes: 12, meaning: '알리다, 보답하다', composition: '幸(다행 행) + 卩(병부 절) + 又(또 우)', note: '복잡한 구조 — 상단 → 하단 순서.' },
+  '知': { strokes: 8, meaning: '알다', composition: '矢(화살 시) + 口(입 구)', note: '矢(왼쪽 위) → 口(오른쪽 아래).' },
+  '文': { strokes: 4, meaning: '글, 문화', composition: '상형자 (문양/교차 모양)', note: '가로획 → 삐침 → 파임 → 점 순서.' },
+};
+
+function openStrokeModal(char) {
+  const data = STROKE_DATA[char] || { strokes: '?', meaning: '데이터 없음', composition: '-', note: '획순 데이터가 없는 한자입니다.' };
+  const modal = document.getElementById('hanjaModal');
+  document.getElementById('hanjaModalContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:1rem;">
+      <span style="font-size:3.5rem;color:var(--ink);line-height:1;">${char}</span>
+      <div style="font-size:0.8rem;color:var(--ink3);margin-top:0.3rem;">총 ${data.strokes}획</div>
+    </div>
+    <div class="stroke-canvas-wrap">
+      <canvas id="strokeCanvas" width="240" height="240"></canvas>
+    </div>
+    <div class="stroke-info">
+      <div class="stroke-info-item"><div class="stroke-info-label">의미</div><div class="stroke-info-val">${data.meaning}</div></div>
+      <div class="stroke-info-item"><div class="stroke-info-label">구성</div><div class="stroke-info-val" style="font-size:0.75rem;">${data.composition}</div></div>
+    </div>
+    <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--ink2);background:var(--bg);padding:0.6rem 0.8rem;border-radius:var(--radius-sm);">✏️ ${data.note}</div>
+    <div style="display:flex;gap:0.5rem;margin-top:1rem;justify-content:center;">
+      <button class="sh-btn primary" onclick="animateStroke('${char}')">▶ 애니메이션</button>
+      <button class="sh-btn teal" onclick="speakZH('${encodeURIComponent(char)}')">🔊 중국어</button>
+      <button class="sh-btn" style="background:var(--accent2);color:#fff;border-color:var(--accent2);" onclick="speakJA('${encodeURIComponent(char)}')">🔊 일본어</button>
+    </div>
+  `;
+  modal.classList.add('open');
+  setTimeout(() => drawStrokeGuide(char), 50);
+}
+
+function closeStrokeModal() {
+  document.getElementById('hanjaModal').classList.remove('open');
+}
+
+document.getElementById('hanjaModal').addEventListener('click', function(e) {
+  if (e.target === this) closeStrokeModal();
+});
+
+function drawStrokeGuide(char) {
+  const canvas = document.getElementById('strokeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = 240, h = 240;
+  ctx.clearRect(0, 0, w, h);
+  // grid
+  ctx.strokeStyle = 'rgba(107,76,154,0.15)';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(w,h); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w,0); ctx.lineTo(0,h); ctx.stroke();
+  ctx.strokeStyle = 'rgba(107,76,154,0.2)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(4,4,w-8,h-8);
+  // character
+  ctx.font = '160px serif';
+  ctx.fillStyle = 'rgba(26,26,46,0.12)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(char, w/2, h/2+8);
+}
+
+function animateStroke(char) {
+  const canvas = document.getElementById('strokeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = 240, h = 240;
+  let progress = 0;
+  drawStrokeGuide(char);
+  const frames = 60;
+  function frame() {
+    if (progress > frames) return;
+    ctx.clearRect(0,0,w,h);
+    drawStrokeGuide(char);
+    const alpha = Math.min(progress / frames, 1);
+    ctx.font = '160px serif';
+    ctx.fillStyle = `rgba(107,76,154,${alpha * 0.9})`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // clip animation: reveal top-to-bottom
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h * alpha);
+    ctx.clip();
+    ctx.fillText(char, w/2, h/2+8);
+    ctx.restore();
+    progress++;
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+// ===== FAVORITES ENGINE =====
+let favorites = JSON.parse(localStorage.getItem('libFavorites') || '[]');
+
+function favKey(type, id) { return type + '::' + id; }
+
+function isFav(type, id) { return favorites.some(f => f.key === favKey(type, id)); }
+
+function toggleFav(type, id, main, sub, ko, lang, btnEl) {
+  const key = favKey(type, id);
+  if (isFav(type, id)) {
+    favorites = favorites.filter(f => f.key !== key);
+    btnEl.classList.remove('active');
+    btnEl.textContent = '☆';
+  } else {
+    favorites.push({ key, type, id, main, sub, ko, lang, savedAt: Date.now() });
+    btnEl.classList.add('active');
+    btnEl.textContent = '⭐';
+  }
+  localStorage.setItem('libFavorites', JSON.stringify(favorites));
+  renderFavList();
+}
+
+function renderFavList() {
+  const list = document.getElementById('favList');
+  if (!favorites.length) {
+    list.innerHTML = '<div class="fav-empty">⭐ 아직 저장된 항목이 없습니다.<br>각 탭의 항목 옆 ☆ 버튼을 눌러 추가하세요.</div>';
+    return;
+  }
+  const groups = {};
+  const labels = { zh:'🇨🇳 중국어', ja:'🇯🇵 일본어', en:'🇬🇧 영국 영어', hanja:'漢 한자', pron:'🔊 RP 발음' };
+  favorites.forEach(f => {
+    const g = f.type; if (!groups[g]) groups[g] = [];
+    groups[g].push(f);
+  });
+  list.innerHTML = Object.entries(groups).map(([type, items]) => `
+    <div class="fav-section">
+      <div class="fav-section-title">${labels[type] || type}</div>
+      ${items.map(f => `
+        <div class="fav-item">
+          <div style="flex:1;min-width:0;">
+            <div class="fav-item-main">${f.main}</div>
+            ${f.sub ? `<div class="fav-item-sub">${f.sub}</div>` : ''}
+            ${f.ko ? `<div class="fav-item-ko">${f.ko}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:0.3rem;flex-shrink:0;">
+            <button class="fav-btn active" title="즐겨찾기 해제" onclick="toggleFav('${f.type}','${f.id}','${encodeURIComponent(f.main)}','${encodeURIComponent(f.sub||'')}','${encodeURIComponent(f.ko||'')}','${f.lang}',this);this.closest('.fav-item').remove();checkFavEmpty()">⭐</button>
+            <button class="mini-speak-btn" onclick="speak('${encodeURIComponent(f.main)}','${f.lang}')">🔊</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function checkFavEmpty() {
+  if (!favorites.length) renderFavList();
+}
+
+// ===== STATE =====
+let currentLevel = 'IM';
+let selectedTopic = null;
+
+// ===== INIT =====
+function init() {
+  renderTopics();
+  renderPron(PRON_DATA);
+  renderHanja(HANJA_DATA);
+  renderConv('zh', ZH_DATA);
+  renderConv('ja', JA_DATA);
+  renderConvEn(EN_DATA);
+  renderInterview();
+  startQuiz();
+  renderFavList();
+}
+
+// ===== TABS =====
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== INTERVIEW =====
+function renderInterview() {
+  const list = document.getElementById('interviewList');
+  list.innerHTML = INTERVIEW_DATA.map((item, i) => `
+    <div class="interview-q" id="iq_${i}" onclick="toggleIQ(${i})">
+      <div class="iq-text">Q. ${item.q} <span class="iq-tag">${item.tag}</span></div>
+      <div class="iq-answer" id="iqa_${i}">
+        <div class="iq-ans-en">${item.en}</div>
+        <div class="iq-ans-ko">🇰🇷 ${item.ko}</div>
+        <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button class="sh-btn primary" onclick="event.stopPropagation();speak('${encodeURIComponent(item.en)}','en-GB')">🔊 RP 발음 듣기</button>
+          <button class="sh-btn danger" onclick="event.stopPropagation();shadowRecord('iq${i}','en-GB')">🎙 녹음</button>
+          <button class="sh-btn teal" id="playBtn_iq${i}" onclick="event.stopPropagation();shadowPlayback('iq${i}')" disabled>▶ 내 발음</button>
+        </div>
+        <div class="shadow-status" id="ss_iq${i}">💡 원문을 듣고 따라 말해보세요.</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleIQ(i) {
+  const qEl = document.getElementById('iq_' + i);
+  const aEl = document.getElementById('iqa_' + i);
+  const isOpen = aEl.classList.contains('show');
+  document.querySelectorAll('.iq-answer.show').forEach(a => a.classList.remove('show'));
+  document.querySelectorAll('.interview-q.open').forEach(q => q.classList.remove('open'));
+  if (!isOpen) { aEl.classList.add('show'); qEl.classList.add('open'); }
+}
+
+
+function setLevel(level, btn) {
+  currentLevel = level;
+  document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  if (selectedTopic) showScript(selectedTopic);
+}
+
+function renderTopics() {
+  const grid = document.getElementById('topicGrid');
+  grid.innerHTML = OPIC_TOPICS.map(t => `
+    <div class="topic-card" onclick="selectTopic('${t.id}', this)">
+      <div class="topic-emoji">${t.emoji}</div>
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-en">${t.en}</div>
+    </div>
+  `).join('');
+}
+
+function selectTopic(id, el) {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTopic = id;
+  showScript(id);
+}
+
+function showScript(id) {
+  const topic = OPIC_TOPICS.find(t => t.id === id);
+  const script = OPIC_SCRIPTS[id];
+  if (!script) return;
+  const levelData = script[currentLevel] || script['IM'];
+  const card = document.getElementById('scriptCard');
+  const title = document.getElementById('scriptTitle');
+  const content = document.getElementById('scriptContent');
+  card.style.display = 'block';
+  title.textContent = `📄 ${topic.name} — ${currentLevel} 스크립트`;
+  content.innerHTML = `
+    <div class="script-box">
+      <div class="script-level">🇬🇧 English Script (${currentLevel})</div>
+      <div class="script-text">${levelData.en}</div>
+      <button class="speak-btn" onclick="speak('${encodeURIComponent(levelData.en)}', 'en-GB')">🔊 RP 발음으로 듣기</button>
+    </div>
+    <div class="script-box" style="margin-top:0.75rem; border-left-color: var(--teal);">
+      <div class="script-level" style="color:var(--teal)">🇰🇷 한국어 요약</div>
+      <div class="script-ko">${levelData.ko}</div>
+    </div>
+    <div class="tts-note">💡 TTS는 브라우저 Web Speech API를 사용합니다. en-GB 음성이 없으면 기본 영어 음성으로 재생됩니다.</div>
+  `;
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ===== PRONUNCIATION =====
+function renderPron(data) {
+  const list = document.getElementById('pronList');
+  list.innerHTML = data.map((p, i) => {
+    const fav = isFav('pron', 'p'+i);
+    return `
+    <div class="pron-word" onclick="speakWord('${encodeURIComponent(p.word)}')">
+      <div>
+        <div class="pron-en">${p.word} <span class="pron-tag rp">RP</span></div>
+        <div class="pron-ipa">${p.ipa}</div>
+        <div class="pron-tip">💡 ${p.tip}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.3rem;">
+        <span style="font-size:1.2rem; opacity:0.4">🔊</span>
+        <button class="fav-btn ${fav?'active':''}" onclick="event.stopPropagation();toggleFav('pron','p${i}','${encodeURIComponent(p.word)}','${encodeURIComponent(p.ipa)}','','en-GB',this)" title="즐겨찾기">${fav?'⭐':'☆'}</button>
+      </div>
+    </div>
+  `}).join('');
+}
+
+function filterPron(q) {
+  const filtered = PRON_DATA.filter(p =>
+    p.word.includes(q.toLowerCase()) || p.tip.includes(q) || p.ipa.includes(q)
+  );
+  renderPron(filtered);
+}
+
+// ===== HANJA =====
+function renderHanja(data) {
+  const grid = document.getElementById('hanjaGrid');
+  grid.innerHTML = data.map(h => `
+    <div class="hanja-card">
+      <div class="hanja-char" style="cursor:pointer;" onclick="openStrokeModal('${h.char}')" title="획순 보기">${h.char}</div>
+      <div class="hanja-row"><span class="hanja-label">훈음 </span><span class="hanja-ko">${h.hun} (${h.eum})</span></div>
+      <div class="hanja-row" style="display:flex;align-items:center;justify-content:space-between;">
+        <div><span class="hanja-label">중국어 </span><span class="hanja-pinyin">${h.pinyin}</span></div>
+        <button class="mini-speak-btn zh" onclick="event.stopPropagation();speakZH('${encodeURIComponent(h.char)}')" title="중국어 발음 듣기">🔊</button>
+      </div>
+      <div class="hanja-row" style="display:flex;align-items:center;justify-content:space-between;">
+        <div><span class="hanja-label">일본어 </span><span class="hanja-romaji">${h.romaji}</span></div>
+        <button class="mini-speak-btn ja" onclick="event.stopPropagation();speakJA('${encodeURIComponent(h.char)}')" title="일본어 발음 듣기">🔊</button>
+      </div>
+      <div style="font-size:0.68rem; color:var(--ink3); margin-top:0.35rem;">${h.ex}</div>
+      <button class="mini-speak-btn" style="width:100%;margin-top:0.5rem;border:1px solid var(--border);border-radius:4px;padding:3px;font-size:0.65rem;color:var(--accent2);opacity:0.8;" onclick="openStrokeModal('${h.char}')">✏️ 획순</button>
+    </div>
+  `).join('');
+}
+
+function filterHanja(q) {
+  const filtered = HANJA_DATA.filter(h =>
+    h.char.includes(q) || h.eum.includes(q) || h.hun.includes(q) ||
+    h.pinyin.includes(q) || h.ex.includes(q)
+  );
+  renderHanja(filtered);
+}
+
+// ===== CONVERSATION (with shadowing) =====
+let activeShadowId = null;
+
+function renderConv(lang, data) {
+  const container = document.getElementById(lang === 'zh' ? 'chineseList' : 'japaneseList');
+  const langCode = lang === 'zh' ? 'zh-CN' : 'ja-JP';
+  container.innerHTML = data.map((cat, ci) => `
+    <div class="conv-category">
+      <div class="conv-cat-title">${cat.cat}</div>
+      ${cat.items.map((item, ii) => {
+        const id = lang + '_' + ci + '_' + ii;
+        const main = lang === 'zh' ? item.zh : item.ja;
+        const read = lang === 'zh' ? item.py : item.read;
+        const fav = isFav(lang, id);
+        return `
+          <div class="conv-item" id="ci_${id}" onclick="toggleShadow('${id}','${encodeURIComponent(main)}','${encodeURIComponent(read)}','${encodeURIComponent(item.ko)}','${langCode}',this)">
+            <div>
+              <div class="conv-main">${main}</div>
+              <div class="conv-read">${read}</div>
+            </div>
+            <div>
+              <div class="conv-ko">${item.ko}</div>
+              <div class="conv-tip" style="display:flex;align-items:center;justify-content:space-between;">
+                <span>💡 ${item.tip} &nbsp;<span style="color:var(--accent2);font-size:0.7rem;">▶ 클릭해서 따라하기</span></span>
+                <button class="fav-btn ${fav?'active':''}" onclick="event.stopPropagation();toggleFav('${lang}','${id}','${encodeURIComponent(main)}','${encodeURIComponent(read)}','${encodeURIComponent(item.ko)}','${langCode}',this)" title="즐겨찾기">${fav?'⭐':'☆'}</button>
+              </div>
+            </div>
+          </div>
+          <div class="shadow-panel" id="sp_${id}"></div>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function renderConvFiltered(lang, data) {
+  renderConv(lang, data.map(cat => cat));
+}
+
+function filterConv(lang, q) {
+  const data = lang === 'zh' ? ZH_DATA : JA_DATA;
+  const filtered = data.map(cat => ({
+    ...cat,
+    items: cat.items.filter(item => {
+      const main = lang === 'zh' ? item.zh : item.ja;
+      return main.includes(q) || item.ko.includes(q) ||
+        (lang === 'zh' ? item.py : item.read).includes(q);
+    })
+  })).filter(cat => cat.items.length > 0);
+  renderConv(lang, q ? filtered : data);
+}
+
+// ===== ENGLISH CONVERSATION DATA =====
+const EN_DATA = [
+  { cat: '📚 도서관 & 업무', items: [
+    { en: 'Could you help me locate this book, please?', ipa: '/kʊd juː help miː ləʊˈkeɪt ðɪs bʊk pliːz/', ko: '이 책을 찾는 것을 도와주시겠어요?', tip: '정중한 요청' },
+    { en: 'I\'m afraid this title is currently on loan.', ipa: '/aɪm əˈfreɪd ðɪs ˈtaɪtl ɪz ˈkʌrəntli ɒn ləʊn/', ko: '죄송합니다만, 이 자료는 현재 대출 중입니다.', tip: 'RP: afraid의 ə, loan의 ləʊ 주의' },
+    { en: 'The reading room closes at half past six.', ipa: '/ðə ˈriːdɪŋ ruːm ˈkləʊzɪz ət hɑːf pɑːst sɪks/', ko: '열람실은 6시 30분에 닫습니다.', tip: 'RP: half /hɑːf/, past /pɑːst/ — 긴 a 발음' },
+    { en: 'Shall I reserve that for you?', ipa: '/ʃæl aɪ rɪˈzɜːv ðæt fə juː/', ko: '예약해 드릴까요?', tip: 'RP: shall 사용 — 영국 영어의 특징' },
+    { en: 'I\'d like to renew my library card, please.', ipa: '/aɪd laɪk tə rɪˈnjuː maɪ ˈlaɪbrəri kɑːd pliːz/', ko: '도서관 카드를 갱신하고 싶습니다.', tip: 'renew의 /rɪˈnjuː/ — j 삽입 발음' },
+  ]},
+  { cat: '👩‍💼 인터뷰 & 자기소개', items: [
+    { en: 'I have been working in research administration for over eleven years.', ipa: '/aɪ həv biːn ˈwɜːkɪŋ ɪn rɪˈsɜːtʃ ədˌmɪnɪˈstreɪʃən fər ˈəʊvər ɪˈlevn jɪəz/', ko: '저는 11년 이상 연구행정 분야에서 근무해 왔습니다.', tip: 'RP: research /ˈriːsɜːtʃ/ — 1음절 강세' },
+    { en: 'My particular interest lies in data librarianship.', ipa: '/maɪ pəˈtɪkjʊlə ˈɪntrəst laɪz ɪn ˈdeɪtə laɪˈbreərɪənʃɪp/', ko: '저는 데이터 사서직에 특별한 관심을 갖고 있습니다.', tip: 'particular /pəˈtɪkjʊlə/ — 끝 r 약화' },
+    { en: 'I am currently completing a library science qualification.', ipa: '/aɪ æm ˈkʌrəntli kəmˈpliːtɪŋ ə ˈlaɪbrəri ˈsaɪəns ˌkwɒlɪfɪˈkeɪʃən/', ko: '현재 문헌정보학 자격증 과정을 이수하고 있습니다.', tip: 'qualification — 5음절, 4번째 강세' },
+    { en: 'I believe information management is at the heart of good research.', ipa: '/aɪ bɪˈliːv ɪnfəˈmeɪʃən ˈmænɪdʒmənt ɪz ət ðə hɑːt əv ɡʊd rɪˈsɜːtʃ/', ko: '정보 관리가 좋은 연구의 핵심이라고 생각합니다.', tip: 'heart /hɑːt/ — RP는 r을 발음하지 않음 (non-rhotic)' },
+    { en: 'I would welcome the opportunity to contribute to your team.', ipa: '/aɪ wʊd ˈwelkəm ðɪ ˌɒpəˈtjuːnɪti tə kənˈtrɪbjuːt tə jɔː tiːm/', ko: '귀 팀에 기여할 기회를 환영합니다.', tip: 'opportunity /ˌɒpəˈtjuːnɪti/ — tj 융합 발음' },
+  ]},
+  { cat: '💬 일상 & 격식 회화', items: [
+    { en: 'How do you do? I\'m very pleased to meet you.', ipa: '/haʊ də juː duː aɪm ˈveri pliːzd tə miːt juː/', ko: '처음 뵙겠습니다. 만나서 매우 반갑습니다.', tip: '"How do you do" — RP 격식 첫 인사, 상대방도 같은 표현으로 답함' },
+    { en: 'I\'m terribly sorry to have kept you waiting.', ipa: '/aɪm ˈterɪbli ˈsɒri tə həv kept juː ˈweɪtɪŋ/', ko: '기다리게 해서 정말 죄송합니다.', tip: 'terribly sorry — 영국식 과장 사과 표현' },
+    { en: 'Would you mind if I asked you a few questions?', ipa: '/wʊd juː maɪnd ɪf aɪ ɑːskt juː ə fjuː ˈkwesʧənz/', ko: '몇 가지 여쭤봐도 될까요?', tip: 'asked /ɑːskt/ — bath class, 긴 a 발음' },
+    { en: 'That\'s rather a good point, actually.', ipa: '/ðæts ˈrɑːðər ə ɡʊd pɔɪnt ˈækʧuəli/', ko: '사실 꽤 좋은 지적이네요.', tip: 'rather /ˈrɑːðər/ — RP 특징적 발음, actually 습관적으로 사용' },
+    { en: 'I shall look into that and get back to you.', ipa: '/aɪ ʃæl lʊk ˈɪntʊ ðæt ənd ɡet bæk tə juː/', ko: '확인해 보고 연락드리겠습니다.', tip: '"shall" + "get back to you" — 전형적인 영국 비즈니스 표현' },
+  ]},
+  { cat: '🔍 학술·연구 영어', items: [
+    { en: 'Could you direct me to the periodicals section?', ipa: '/kʊd juː dɪˈrekt miː tə ðə ˌpɪərɪˈɒdɪkəlz ˈsekʃən/', ko: '정기간행물 코너로 안내해 주시겠어요?', tip: 'periodicals /ˌpɪərɪˈɒdɪkəlz/ — 5음절, 3번째 강세' },
+    { en: 'I\'m looking for resources on information retrieval systems.', ipa: '/aɪm ˈlʊkɪŋ fə rɪˈsɔːsɪz ɒn ˌɪnfəˈmeɪʃən rɪˈtriːvəl ˈsɪstəmz/', ko: '정보검색 시스템에 관한 자료를 찾고 있습니다.', tip: 'retrieval /rɪˈtriːvəl/ — ie 이중모음 주의' },
+    { en: 'The bibliography is listed at the end of each chapter.', ipa: '/ðə bɪbliˈɒɡrəfi ɪz ˈlɪstɪd ət ðɪ end əv iːʧ ˈʧæptə/', ko: '참고문헌 목록은 각 장의 끝에 있습니다.', tip: 'bibliography — 6음절, 3번째 강세' },
+    { en: 'This journal is available through our institutional subscription.', ipa: '/ðɪs ˈdʒɜːnəl ɪz əˈveɪləbl θruː ˈaʊər ˌɪnstɪˈtjuːʃənl səbˈskrɪpʃən/', ko: '이 저널은 기관 구독으로 이용 가능합니다.', tip: 'institutional /ˌɪnstɪˈtjuːʃənl/ — tj 발음 융합' },
+    { en: 'I\'d recommend using Boolean operators to refine your search.', ipa: '/aɪd ˌrekəˈmend ˈjuːzɪŋ ˈbuːliən ˈɒpəreɪtəz tə rɪˈfaɪn jɔː sɜːʧ/', ko: '검색을 정교화하려면 불리언 연산자 사용을 권장합니다.', tip: 'Boolean /ˈbuːliən/ — 3음절, 첫 강세. ɒ 발음 주의' },
+    { en: 'The peer review process ensures scholarly rigour.', ipa: '/ðə pɪər rɪˈvjuː ˈprəʊses ɪnˈʃʊəz ˈskɒləli ˈrɪɡə/', ko: '동료 심사 과정은 학술적 엄밀성을 보장합니다.', tip: 'rigour — 영국식 철자 (미국 rigor). /ˈrɪɡə/ — r 묵음' },
+  ]},
+  { cat: '🏛️ 도서관 행정 & 이용안내', items: [
+    { en: 'The library opens at nine and closes at half past eight.', ipa: '/ðə ˈlaɪbrəri ˈəʊpənz ət naɪn ənd ˈkləʊzɪz ət hɑːf pɑːst eɪt/', ko: '도서관은 9시에 열고 8시 반에 닫습니다.', tip: 'half past — 영국식 시간 표현. half /hɑːf/ 긴 a' },
+    { en: 'I\'m afraid the library will be closed for the bank holiday.', ipa: '/aɪm əˈfreɪd ðə ˈlaɪbrəri wɪl biː kləʊzd fə ðə bæŋk ˈhɒlɪdeɪ/', ko: '공휴일에는 도서관이 휴관합니다.', tip: 'bank holiday — 영국식 공휴일 표현. ɒ 발음 주의' },
+    { en: 'Could I trouble you to fill in this reader satisfaction survey?', ipa: '/kʊd aɪ ˈtrʌbl juː tə fɪl ɪn ðɪs ˈriːdə ˌsætɪsˈfækʃən ˈsɜːveɪ/', ko: '이용자 만족도 설문을 작성해 주시겠어요?', tip: '"Could I trouble you to" — 매우 공손한 영국식 요청 표현' },
+    { en: 'Mobile phones should be kept on silent in the reading room.', ipa: '/ˈməʊbaɪl fəʊnz ʃʊd biː kept ɒn ˈsaɪlənt ɪn ðə ˈriːdɪŋ ruːm/', ko: '열람실에서는 휴대폰을 무음으로 해주세요.', tip: 'mobile /ˈməʊbaɪl/ — RP는 2음절. 미국식 /ˈmoʊbl/과 다름' },
+    { en: 'The new acquisitions are displayed near the main entrance.', ipa: '/ðə njuː ˌækwɪˈzɪʃənz ə dɪˈspleɪd nɪə ðə meɪn ˈentrəns/', ko: '신착자료는 정문 근처에 전시되어 있습니다.', tip: 'acquisitions /ˌækwɪˈzɪʃənz/ — 4음절, 3번째 강세' },
+    { en: 'Please return borrowed items to the returns desk by the due date.', ipa: '/pliːz rɪˈtɜːn ˈbɒrəʊd ˈaɪtəmz tə ðə rɪˈtɜːnz desk baɪ ðə djuː deɪt/', ko: '대출 자료는 반납일까지 반납 데스크에 반납해 주세요.', tip: 'due /djuː/ — RP: j 삽입 발음. 미국식 /duː/와 구분' },
+  ]},
+];
+
+function renderConvEn(data) {
+  const container = document.getElementById('englishList');
+  container.innerHTML = data.map((cat, ci) => `
+    <div class="conv-category">
+      <div class="conv-cat-title">${cat.cat}</div>
+      ${cat.items.map((item, ii) => {
+        const id = 'en_' + ci + '_' + ii;
+        const fav = isFav('en', id);
+        return `
+          <div class="conv-item" id="ci_${id}" onclick="toggleShadow('${id}','${encodeURIComponent(item.en)}','${encodeURIComponent(item.ipa)}','${encodeURIComponent(item.ko)}','en-GB',this)">
+            <div>
+              <div class="conv-main">${item.en}</div>
+              <div class="conv-read" style="font-family:monospace;">${item.ipa}</div>
+            </div>
+            <div>
+              <div class="conv-ko">${item.ko}</div>
+              <div class="conv-tip" style="display:flex;align-items:center;justify-content:space-between;">
+                <span>💡 ${item.tip} &nbsp;<span style="color:var(--accent2);font-size:0.7rem;">▶ 클릭해서 따라하기</span></span>
+                <button class="fav-btn ${fav?'active':''}" onclick="event.stopPropagation();toggleFav('en','${id}','${encodeURIComponent(item.en)}','${encodeURIComponent(item.ipa)}','${encodeURIComponent(item.ko)}','en-GB',this)" title="즐겨찾기">${fav?'⭐':'☆'}</button>
+              </div>
+            </div>
+          </div>
+          <div class="shadow-panel" id="sp_${id}"></div>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function filterConvEn(q) {
+  const filtered = q
+    ? EN_DATA.map(cat => ({
+        ...cat,
+        items: cat.items.filter(item => item.en.toLowerCase().includes(q.toLowerCase()) || item.ko.includes(q))
+      })).filter(cat => cat.items.length > 0)
+    : EN_DATA;
+  renderConvEn(filtered);
+}
+
+// ===== SHADOWING ENGINE =====
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordedBlob = null;
+let recordedURL = null;
+
+function toggleShadow(id, encMain, encRead, encKo, langCode, rowEl) {
+  const panel = document.getElementById('sp_' + id);
+  const isOpen = panel.classList.contains('open');
+  // close all
+  document.querySelectorAll('.shadow-panel.open').forEach(p => { p.classList.remove('open'); p.innerHTML = ''; });
+  document.querySelectorAll('.conv-item.active-shadow').forEach(el => el.classList.remove('active-shadow'));
+  if (isOpen) return;
+  // open this
+  panel.classList.add('open');
+  rowEl.classList.add('active-shadow');
+  activeShadowId = id;
+  const main = decodeURIComponent(encMain);
+  const read = decodeURIComponent(encRead);
+  const ko = decodeURIComponent(encKo);
+  const isEn = langCode === 'en-GB';
+  panel.innerHTML = `
+    <div class="shadow-sentence">${main}</div>
+    <div class="shadow-read">${read}</div>
+    <div class="shadow-ko">${ko}</div>
+    <div class="shadow-controls">
+      <button class="sh-btn primary" onclick="shadowListen('${encMain}','${langCode}')">🔊 원문 듣기</button>
+      <button class="sh-btn danger" id="recBtn_${id}" onclick="shadowRecord('${id}','${langCode}')">🎙 녹음 시작</button>
+      <button class="sh-btn teal" id="playBtn_${id}" onclick="shadowPlayback('${id}')" disabled>▶ 내 발음 듣기</button>
+      <button class="sh-btn" onclick="shadowRepeat('${encMain}','${langCode}','${id}')">🔁 원문 → 내 발음</button>
+    </div>
+    <div class="shadow-status" id="ss_${id}">💡 먼저 원문을 듣고, 녹음 버튼을 눌러 따라 말해보세요.</div>
+  `;
+}
+
+function shadowListen(encText, lang) {
+  speak(encText, lang);
+}
+
+async function shadowRecord(id, lang) {
+  const btn = document.getElementById('recBtn_' + id);
+  const status = document.getElementById('ss_' + id);
+  const playBtn = document.getElementById('playBtn_' + id);
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    btn.textContent = '🎙 녹음 시작';
+    btn.classList.remove('danger');
+    status.textContent = '✅ 녹음 완료! "내 발음 듣기"로 확인하세요.';
+    status.className = 'shadow-status ok';
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordedChunks = [];
+    if (recordedURL) { URL.revokeObjectURL(recordedURL); recordedURL = null; }
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+      recordedURL = URL.createObjectURL(recordedBlob);
+      playBtn.disabled = false;
+      stream.getTracks().forEach(t => t.stop());
+    };
+    mediaRecorder.start();
+    btn.textContent = '⏹ 녹음 중지';
+    btn.classList.add('danger');
+    status.textContent = '🔴 녹음 중... 말하고 나서 중지 버튼을 눌러주세요.';
+    status.className = 'shadow-status rec';
+  } catch(e) {
+    status.textContent = '❌ 마이크 접근 권한이 필요합니다. 브라우저 설정을 확인해 주세요.';
+    status.className = 'shadow-status';
+  }
+}
+
+function shadowPlayback(id) {
+  const status = document.getElementById('ss_' + id);
+  if (!recordedURL) { status.textContent = '❌ 녹음된 내용이 없습니다.'; return; }
+  const audio = new Audio(recordedURL);
+  audio.play();
+  status.textContent = '▶ 내 발음 재생 중...';
+  audio.onended = () => { status.textContent = '✅ 원문과 비교해보세요!'; status.className = 'shadow-status ok'; };
+}
+
+function shadowRepeat(encText, lang, id) {
+  const status = document.getElementById('ss_' + id);
+  status.textContent = '🔊 원문 재생 중...';
+  status.className = 'shadow-status';
+  speak(encText, lang);
+  setTimeout(() => {
+    if (!recordedURL) { status.textContent = '⚠ 녹음 후 사용해주세요.'; return; }
+    status.textContent = '▶ 내 발음 재생 중...';
+    const audio = new Audio(recordedURL);
+    audio.play();
+    audio.onended = () => { status.textContent = '✅ 비교 완료!'; status.className = 'shadow-status ok'; };
+  }, 3500);
+}
+
+// ===== TTS =====
+function speak(encodedText, lang) {
+  if (!window.speechSynthesis) { alert('이 브라우저는 음성 합성을 지원하지 않습니다.'); return; }
+  const text = decodeURIComponent(encodedText);
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang;
+  utter.rate = 0.88;
+  utter.pitch = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const match = voices.find(v => v.lang === lang) ||
+                voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+  if (match) utter.voice = match;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakWord(encodedWord) { speak(encodedWord, 'en-GB'); }
+
+function speakZH(encodedChar) {
+  speak(encodedChar, 'zh-CN');
+}
+
+function speakJA(encodedChar) {
+  speak(encodedChar, 'ja-JP');
+}
+
+// ===== MY SCRIPT =====
+const TOPIC_PROMPTS = {
+  opic: `You are an expert OPIc English coach specialising in library and information science. The user is a Korean librarian preparing for the OPIc speaking test targeting IM~IH level. Correct the script for: grammar errors, unnatural expressions, vocabulary improvements suited to library/information science context, and RP British pronunciation notes where relevant. Be specific and practical.`,
+  interview: `You are an expert in professional English for library job interviews in Korea. The user is preparing for a librarian position interview. Correct for: formal register, professional library terminology, grammar, and clear structured delivery. Suggest more impactful phrasing where appropriate.`,
+  email: `You are a business English writing expert. The user is a Korean librarian writing professional emails in English. Correct for: formal business tone, email structure, grammar, and natural British English expressions used in professional library correspondence.`,
+  reference: `You are a reference librarian communication expert. The user is practising English for patron/researcher interactions. Correct for: polite and clear service language, natural conversational flow, grammar, and helpful phrasing appropriate for reference desk or research consultation contexts.`,
+  presentation: `You are an academic English presentation coach with expertise in library and information science. The user is preparing an academic presentation script. Correct for: academic register, clear argumentation, precise library/information science terminology, grammar, and presentation flow.`
+};
+
+const SAMPLES = {
+  opic: `I am a librarian who work in research institute. My main job is help researcher find information they need. Yesterday, a professor come to me and say he need article about data management. I search in Web of Science and find ten relevant paper. I also help him make data management plan for his new project. I think data librarian is very important job because research data is need to manage carefully.`,
+  interview: `I have worked in research administration for eleven year. During this time, I learn importance of information management. I decide to become librarian because I want to help researcher more better. I am study library science now and I will graduate on August 2026. My goal is work in special library or research institution as data librarian.`,
+  email: `Dear Professor Kim, I am writing to inform you that article you request last week is arrive. Please come to library to collect it. Also, I want to tell you that we have new database about scientific journal. If you want, I can show you how to use it. Please let me know if you have question. Best regard, Ming`,
+  reference: `Hello, can I help you? What kind of information you are looking? Oh, you need information about KDC classification system. I know good book about it. Also we have online resource that explain about it very detail. Let me show you how to search it in our catalog. Do you have library card with you?`,
+  presentation: `Today I will talk about data librarianship and its important in modern research institution. First, I explain what is data librarian. Second, I discuss about FAIR principle. Third, I present case study from my workplace. Data librarian is person who help researcher manage their data. This is different from traditional librarian because they focus on data lifecycle management.`
+};
+
+let scriptHistory = JSON.parse(localStorage.getItem('scriptHistory') || '[]');
+
+function saveApiKey(val) {
+  if (val) localStorage.setItem('msApiKey', val);
+}
+
+function toggleApiKeyVisible() {
+  const inp = document.getElementById('msApiKey');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function clearScript() {
+  document.getElementById('msInput').value = '';
+  document.getElementById('msResult').innerHTML = '';
+}
+
+function loadSample() {
+  const topic = document.getElementById('msTopicSelect').value;
+  document.getElementById('msInput').value = SAMPLES[topic] || SAMPLES.opic;
+}
+
+async function correctScript() {
+  const apiKey = document.getElementById('msApiKey').value || localStorage.getItem('msApiKey') || '';
+  const input = document.getElementById('msInput').value.trim();
+  const topic = document.getElementById('msTopicSelect').value;
+
+  if (!apiKey) {
+    showMsError('API 키를 입력해주세요. console.anthropic.com에서 발급받을 수 있습니다.');
+    return;
+  }
+  if (!input) {
+    showMsError('교정할 스크립트를 입력해주세요.');
+    return;
+  }
+  if (input.length < 20) {
+    showMsError('스크립트가 너무 짧습니다. 조금 더 길게 작성해주세요.');
+    return;
+  }
+
+  document.getElementById('msLoading').classList.add('show');
+  document.getElementById('msResult').innerHTML = '';
+  document.getElementById('msCorrectBtn').disabled = true;
+
+  const systemPrompt = TOPIC_PROMPTS[topic];
+  const userPrompt = `Please correct the following English script and respond ONLY in this exact JSON format with no markdown fences:
+{
+  "corrected": "the fully corrected script here",
+  "diff": "show changes using [DEL]wrong text[/DEL] and [INS]correct text[/INS] markers inline within the original text",
+  "reasons": ["reason 1", "reason 2", "reason 3"],
+  "rp_tips": ["RP pronunciation tip 1", "RP pronunciation tip 2"],
+  "level_note": "brief note on the overall English level and main areas for improvement"
+}
+
+Original script:
+${input}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message || `API 오류 (${res.status})`);
+    }
+
+    const data = await res.json();
+    const raw = data.content[0]?.text || '';
+    let parsed;
+    try {
+      parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch {
+      parsed = { corrected: raw, diff: '', reasons: ['파싱 오류 — 원문 결과를 표시합니다.'], rp_tips: [], level_note: '' };
+    }
+
+    renderMsResult(input, parsed, topic);
+    saveToHistory(input, parsed, topic);
+
+  } catch (e) {
+    showMsError('오류: ' + e.message);
+  } finally {
+    document.getElementById('msLoading').classList.remove('show');
+    document.getElementById('msCorrectBtn').disabled = false;
+  }
+}
+
+function renderMsResult(original, data, topic) {
+  const diffHtml = (data.diff || '')
+    .replace(/\[DEL\](.*?)\[\/DEL\]/g, '<span class="ms-del">$1</span>')
+    .replace(/\[INS\](.*?)\[\/INS\]/g, '<span class="ms-ins">$1</span>');
+
+  const reasonsHtml = (data.reasons || []).map(r => `<li>${r}</li>`).join('');
+  const rpHtml = (data.rp_tips || []).map(r => `<li>🇬🇧 ${r}</li>`).join('');
+
+  document.getElementById('msResult').innerHTML = `
+    ${data.level_note ? `<div style="background:#fff8e8;border:1px solid rgba(198,124,26,0.3);border-radius:var(--radius-sm);padding:0.7rem 1rem;margin-bottom:0.75rem;font-size:0.8rem;color:var(--amber);">📊 ${data.level_note}</div>` : ''}
+
+    <div class="ms-section-label">✏️ 교정 전후 비교</div>
+    <div class="ms-diff-wrap">${diffHtml || '<span style="color:var(--teal)">✅ 큰 오류 없음</span>'}</div>
+
+    <div class="ms-section-label">✅ 교정된 전체 스크립트</div>
+    <div class="ms-corrected-box" id="msCorrectedText">${data.corrected || ''}</div>
+    <div class="myscript-toolbar">
+      <button class="ms-btn primary" onclick="speak(encodeURIComponent(document.getElementById('msCorrectedText').innerText),'en-GB')">🔊 RP 발음 듣기</button>
+      <button class="ms-btn danger" onclick="shadowRecord('mscorrect','en-GB')">🎙 따라 말하기</button>
+      <button class="ms-btn teal" id="playBtn_mscorrect" onclick="shadowPlayback('mscorrect')" disabled>▶ 내 발음 듣기</button>
+      <button class="ms-btn" onclick="speak(encodeURIComponent(document.getElementById('msCorrectedText').innerText),'en-GB');setTimeout(()=>{if(recordedURL){const a=new Audio(recordedURL);a.play();}},4000)">🔁 비교 재생</button>
+    </div>
+    <div class="shadow-status" id="ss_mscorrect">💡 원문을 듣고 녹음 버튼으로 따라 말해보세요.</div>
+
+    <div class="ms-reason-box" style="margin-top:0.85rem;">
+      <strong style="font-size:0.78rem;color:var(--teal);">🔍 교정 이유</strong>
+      <ul>${reasonsHtml}</ul>
+      ${rpHtml ? `<strong style="font-size:0.78rem;color:#1a5ca0;display:block;margin-top:0.5rem;">🇬🇧 RP 발음 팁</strong><ul>${rpHtml}</ul>` : ''}
+    </div>
+  `;
+}
+
+function showMsError(msg) {
+  document.getElementById('msResult').innerHTML = `
+    <div style="background:#ffebee;border:1px solid #ffcdd2;border-radius:var(--radius-sm);padding:0.75rem 1rem;font-size:0.82rem;color:#c62828;">
+      ❌ ${msg}
+    </div>`;
+}
+
+function saveToHistory(input, parsed, topic) {
+  const item = {
+    date: new Date().toLocaleString('ko-KR'),
+    topic,
+    preview: input.slice(0, 60) + '...',
+    original: input,
+    corrected: parsed.corrected,
+    reasons: parsed.reasons,
+    rp_tips: parsed.rp_tips,
+    level_note: parsed.level_note
+  };
+  scriptHistory.unshift(item);
+  if (scriptHistory.length > 10) scriptHistory = scriptHistory.slice(0, 10);
+  localStorage.setItem('scriptHistory', JSON.stringify(scriptHistory));
+  renderHistory();
+}
+
+function renderHistory() {
+  if (!scriptHistory.length) return;
+  const card = document.getElementById('msHistoryCard');
+  const list = document.getElementById('msHistoryList');
+  card.style.display = 'block';
+  list.innerHTML = scriptHistory.map((h, i) => `
+    <div class="ms-history-item" onclick="loadHistory(${i})">
+      <div class="ms-history-date">${h.date} — ${h.topic}</div>
+      <div class="ms-history-preview">${h.preview}</div>
+    </div>
+  `).join('');
+}
+
+function loadHistory(i) {
+  const h = scriptHistory[i];
+  document.getElementById('msInput').value = h.original;
+  document.getElementById('msTopicSelect').value = h.topic;
+  renderMsResult(h.original, h, h.topic);
+  document.getElementById('tab-myscript').scrollIntoView({ behavior: 'smooth' });
+}
+
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('msApiKey');
+  if (saved) document.getElementById('msApiKey').value = saved;
+  renderHistory();
+});
+
+init();
+
+
+// ===== MY WORDBOOK =====
+let wordbookData = [];
+let wbFilter = { cat: 'all', query: '' };
+
+function loadWordbook() {
+  // 1) Load from data/wordbook.js (file-based, read-only at runtime via static fallback)
+  // 2) Merge with localStorage entries
+  const stored = JSON.parse(localStorage.getItem('libWordbook') || '[]');
+  // WORDBOOK_DATA comes from data/wordbook.js import (may be empty if file not loaded)
+  const fileData = (typeof WORDBOOK_DATA !== 'undefined' ? WORDBOOK_DATA : []).map(d => ({...d, source: 'file'}));
+  const localData = stored.map(d => ({...d, source: 'local'}));
+  wordbookData = [...fileData, ...localData];
+  renderWbCatFilter();
+  renderWordbook();
+}
+
+function addWordbook() {
+  const front = document.getElementById('wbFront').value.trim();
+  const back  = document.getElementById('wbBack').value.trim();
+  const cat   = document.getElementById('wbCategory').value.trim() || '미분류';
+  const lang  = document.getElementById('wbLang').value;
+  const note  = document.getElementById('wbNote').value.trim();
+  if (!front || !back) { alert('앞면과 뒷면을 모두 입력해주세요.'); return; }
+  const entry = { front, back, category: cat, lang, note, id: Date.now(), source: 'local' };
+  const stored = JSON.parse(localStorage.getItem('libWordbook') || '[]');
+  stored.unshift(entry);
+  localStorage.setItem('libWordbook', JSON.stringify(stored));
+  wordbookData.unshift(entry);
+  ['wbFront','wbBack','wbNote'].forEach(id => document.getElementById(id).value = '');
+  renderWbCatFilter();
+  renderWordbook();
+}
+
+function deleteWordbook(id) {
+  if (!confirm('이 항목을 삭제할까요?')) return;
+  const stored = JSON.parse(localStorage.getItem('libWordbook') || '[]');
+  const updated = stored.filter(d => d.id !== id);
+  localStorage.setItem('libWordbook', JSON.stringify(updated));
+  wordbookData = wordbookData.filter(d => d.id !== id || d.source === 'file');
+  renderWbCatFilter();
+  renderWordbook();
+}
+
+function filterWordbook(q) {
+  wbFilter.query = q.toLowerCase();
+  renderWordbook();
+}
+
+function setWbCat(cat, btn) {
+  wbFilter.cat = cat;
+  document.querySelectorAll('.wb-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWordbook();
+}
+
+function renderWbCatFilter() {
+  const cats = ['all', ...new Set(wordbookData.map(d => d.category).filter(Boolean))];
+  const container = document.getElementById('wbCatFilter');
+  container.innerHTML = cats.map(c => `
+    <button class="wb-cat-btn ${wbFilter.cat === c ? 'active' : ''}"
+      onclick="setWbCat('${c.replace(/'/g, "\'")}', this)">
+      ${c === 'all' ? '전체' : c}
+    </button>
+  `).join('');
+}
+
+function renderWordbook() {
+  const list = document.getElementById('wbList');
+  const stats = document.getElementById('wbStats');
+  let items = wordbookData;
+  if (wbFilter.cat !== 'all') items = items.filter(d => d.category === wbFilter.cat);
+  if (wbFilter.query) items = items.filter(d =>
+    d.front.toLowerCase().includes(wbFilter.query) ||
+    d.back.toLowerCase().includes(wbFilter.query) ||
+    (d.note||'').toLowerCase().includes(wbFilter.query)
+  );
+  const localCount = wordbookData.filter(d => d.source === 'local').length;
+  const fileCount  = wordbookData.filter(d => d.source === 'file').length;
+  stats.textContent = `총 ${wordbookData.length}개 (직접 추가 ${localCount}개 · 파일 ${fileCount}개) · 현재 표시 ${items.length}개`;
+  if (!items.length) {
+    list.innerHTML = '<div class="wb-empty">📭 항목이 없습니다.<br>위에서 추가하거나 data/wordbook.js 파일을 편집해 불러오세요.</div>';
+    return;
+  }
+  const langLabel = {ko:'🇰🇷', en:'🇬🇧', zh:'🇨🇳', ja:'🇯🇵'};
+  list.innerHTML = items.map(d => `
+    <div class="wb-card">
+      <div class="wb-card-header">
+        <div style="flex:1;min-width:0;">
+          <div class="wb-front">${d.front}</div>
+          <div class="wb-back">${d.back}</div>
+          ${d.note ? `<div class="wb-note">💡 ${d.note}</div>` : ''}
+          <div class="wb-meta">
+            <span class="wb-cat-badge">${d.category||'미분류'}</span>
+            <span class="wb-lang-badge">${langLabel[d.lang]||'🌐'} ${d.lang}</span>
+            <span class="wb-source-badge">${d.source === 'file' ? '📁 파일' : '✏️ 직접추가'}</span>
+          </div>
+        </div>
+        <div class="wb-actions">
+          <button class="wb-act-btn" onclick="speak('${encodeURIComponent(d.front)}','${d.lang === 'ko' ? 'ko-KR' : d.lang === 'en' ? 'en-GB' : d.lang === 'zh' ? 'zh-CN' : 'ja-JP'}')" title="발음 듣기">🔊</button>
+          <button class="wb-act-btn" onclick="favFromWb('${encodeURIComponent(d.front)}','${encodeURIComponent(d.back)}','${d.lang}')" title="즐겨찾기">⭐</button>
+          ${d.source === 'local' ? `<button class="wb-act-btn" onclick="deleteWordbook(${d.id})" title="삭제">🗑</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function favFromWb(encFront, encBack, lang) {
+  const front = decodeURIComponent(encFront);
+  const back  = decodeURIComponent(encBack);
+  const id    = 'wb_' + btoa(encodeURIComponent(front)).slice(0,10);
+  const langCode = lang === 'en' ? 'en-GB' : lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'ko-KR';
+  toggleFav('wordbook', id, encFront, encBack, '', langCode, { classList: { contains: () => false, add: ()=>{}, remove: ()=>{} }, textContent: '' });
+  alert('즐겨찾기에 추가했습니다!');
+}
+
+function exportWordbook() {
+  const stored = JSON.parse(localStorage.getItem('libWordbook') || '[]');
+  const blob = new Blob([JSON.stringify(stored, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my_wordbook_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+function importWordbook(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('배열 형식이 아닙니다.');
+      const stored = JSON.parse(localStorage.getItem('libWordbook') || '[]');
+      const merged = [...data.map(d => ({...d, source: 'local', id: d.id || Date.now() + Math.random()})), ...stored];
+      // deduplicate by front+back
+      const seen = new Set();
+      const deduped = merged.filter(d => {
+        const key = d.front + '||' + d.back;
+        if (seen.has(key)) return false;
+        seen.add(key); return true;
+      });
+      localStorage.setItem('libWordbook', JSON.stringify(deduped));
+      loadWordbook();
+      alert(`✅ ${data.length}개 가져오기 완료! (중복 제거 후 ${deduped.length - stored.length}개 신규 추가)`);
+    } catch(err) {
+      alert('❌ JSON 파일 형식 오류: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+
+// ── init 확장 ──────────────────────────────────────────────────
+const _origInit = init;
+window.addEventListener('DOMContentLoaded', () => {
+  _origInit();
+  loadWordbook();
+});
+</script>
+</body>
+</html>
